@@ -5,6 +5,10 @@ import {
 export default class Logo extends Component<any, any> {
 
   private containerRef: HTMLDivElement;
+  
+  public componentDidMount() {
+    this.hide();
+  }
 
   public show = () => {
     this.containerRef.style.display = "inline";
