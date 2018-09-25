@@ -1,5 +1,5 @@
-const W = 1280;
-const H = 720;
+const W = 1920;
+const H = 1080;
 
 
 import {
@@ -55,6 +55,7 @@ export default class Index extends Component<any, any> {
       this.fitViewport();
     });
     this.fitViewport();
+    this.resolutionCallout();
     
     this.startInstallation();
   }
@@ -92,6 +93,11 @@ export default class Index extends Component<any, any> {
         document.querySelector("body").requestFullscreen();
       } else { document.exitFullscreen(); }
     }
+  }
+  
+  private resolutionCallout() {
+    let c = document.querySelector('canvas');
+    console.log(`RENDERING ${c.width} x ${c.height}`);
   }
 
   // @ts-ignore
