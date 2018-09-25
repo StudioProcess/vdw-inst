@@ -82,5 +82,12 @@ export default {
     cellFill: 0.1,
     cellTwoDivisions: 0.5,
     showPartial: false,
+  },
+  "13": {
+    divisionStep: 6,
+    cellDivide: 0.4,
+    cellFill: 0.7,
+    cellTwoDivisions: 0.5,
+    showPartial: false,
   }
 }
