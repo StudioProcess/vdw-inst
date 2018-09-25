@@ -4,9 +4,9 @@ const path = require("path");
 
 module.exports = withProgressBar(
   withTypescript({
+    assetPrefix: process.env.NODE_ENV === 'production' ? '/vdw-inst' : '', // for deployment to gh-pages (docs folder)
+    
     webpack: (config) => {
-      assetPrefix: process.env.NODE_ENV === 'production' ? '/vdw-inst' : '', // for deployment to gh-pages (docs folder)
-      
       // Fixes npm packages that depend on `fs` module
       config.node = {
         fs: 'empty'
