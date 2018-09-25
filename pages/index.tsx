@@ -24,6 +24,7 @@ import DividerLines from "../components/dividerLines";
 import {TimelineLite} from "gsap";
 
 import colors from "../components/colors";
+import layouts from "../components/presets";
 
 export default class Index extends Component<any, any> {
 
@@ -350,7 +351,8 @@ export default class Index extends Component<any, any> {
     return colors[keys[idx]];
   }
   
-  private pickLayoutConfig(): ILayoutGeneratorCongfig {
+  // @ts-ignore
+  private randomLayoutConfig(): ILayoutGeneratorCongfig {
     return {
       divisionStep: this.rndInt(3, 20),
       cellDivide: this.rnd(0.1, 0.9),
@@ -358,6 +360,12 @@ export default class Index extends Component<any, any> {
       cellTwoDivisions: this.rnd(0, 1),
       showPartial: false,
     };
+  }
+  
+  private pickLayoutConfig(): ILayoutGeneratorCongfig {
+    let keys = Object.keys(layouts);
+    let idx = Math.floor(Math.random()*keys.length);
+    return layouts[keys[idx]];
   }
   
   private rnd(min, max) {
@@ -387,7 +395,7 @@ export default class Index extends Component<any, any> {
       this.circlesViewerRef.changeFrontColor(c.circleColor);
       let l = this.pickLayoutConfig();
       console.log("layout config", l);
-      // this.circlesViewerRef.updateLayoutConfig(l);
+      this.circlesViewerRef.updateLayoutConfig(l);
       this.circlesViewerRef.newRandomLayout("", this.rnd(grow[0], grow[1]));
     });
     t.add(() => {}, 3);
