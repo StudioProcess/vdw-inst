@@ -12,6 +12,8 @@ let cellDivide = 0.4; // divide a cell further?
 let cellFill = 0.7; // fill a cell? (vs. leaving it empty)
 let cellTwoDivisions = 0.5; // use two divisions? (vs. three)
 
+let useW = 1.0;
+let useH = 1.0;
 
 let divisionLimit = divisionSteps[divisionStep]; // init divisionLimit from step
 function setDivisionStep(s) {
@@ -45,8 +47,8 @@ export function generateLayout(
   let result = [];
   seedRandom(seed, {global: true});
 
-  baseW = Math.floor(bounds.width);
-  baseH = Math.floor(bounds.height);
+  baseW = Math.floor(bounds.width ) * useW;
+  baseH = Math.floor(bounds.height) * useH;
 
   halfBaseW = baseW * 0.5;
   halfBaseH = baseH * 0.5;
@@ -71,6 +73,8 @@ export function updateConfig(config: ILayoutGeneratorCongfig) {
   cellFill = config.cellFill;
   cellTwoDivisions = config.cellTwoDivisions;
   skipPartial = !config.showPartial;
+  useW = config.useW ? config.useW : 1.0;
+  useH = config.useH ? config.useH : 1.0;
 }
 
 export function runOnCell(
@@ -113,7 +117,7 @@ export function runOnCell(
 
       positionArray.push({
         x: (left + radius) - halfBaseW,
-        y: (top + radius) - halfBaseH,
+        y: (top  + radius) - halfBaseH,
         radius,
       });
 

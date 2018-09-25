@@ -66,6 +66,8 @@ export interface ILayoutGeneratorCongfig {
   cellFill: number;
   cellTwoDivisions: number;
   showPartial: boolean;
+  useW: number;
+  useH: number;
 }
 
 export interface IGravityConfig {
