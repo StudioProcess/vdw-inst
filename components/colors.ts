@@ -8,8 +8,8 @@ export default {
       circleColor: "#000000"
     },
     "02": {
-      bgColor: "#FF2600",
-      circleColor: "#000000"
+      bgColor: "#666666",
+      circleColor: "#3300FF"
     },
     "03": {
       bgColor: "#FF2600",
