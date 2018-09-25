@@ -8,7 +8,7 @@ export default {
   },
   "01": {
     divisionStep: 21,
-    cellDivide: 0.6,
+    cellDivide: 0.85,
     cellFill: 1,
     cellTwoDivisions: 1,
     showPartial: false,
