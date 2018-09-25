@@ -13,6 +13,7 @@ export enum MessageTypes {
   
   startScreensaver,
   startInstallation,
+  stopInstallation,
 
   closeBounds,
 

@@ -21,7 +21,7 @@ import TextViewer from "../components/textViewer/textViewer";
 import Logo from "../components/logo";
 import DividerLines from "../components/dividerLines";
 
-import {TimelineLite} from "gsap";
+import {TimelineLite, TimelineMax} from "gsap";
 
 import colors from "../components/colors";
 import layouts from "../components/presets";
@@ -56,7 +56,7 @@ export default class Index extends Component<any, any> {
     });
     this.fitViewport();
     
-    this.startInstallationLoop();
+    this.startInstallation();
   }
 
   public componentWillUnmount() {
@@ -148,7 +148,11 @@ export default class Index extends Component<any, any> {
         break;
         
       case MessageTypes.startInstallation:
-        this.startInstallationLoop();
+        this.startInstallation(messagePackage.data.mode, messagePackage.data.loop);
+        break;
+        
+      case MessageTypes.stopInstallation:
+        this.stopInstallation();
         break;
 
       case MessageTypes.dropText:
@@ -345,10 +349,30 @@ export default class Index extends Component<any, any> {
   
   
   
-  private pickColors() {
+  private pickColorConfig() {
     let keys = Object.keys(colors);
     let idx = Math.floor(Math.random()*keys.length);
     return colors[keys[idx]];
+  }
+  
+  private setRandomColors() {
+    let c = this.pickColorConfig();
+    this.circlesViewerRef.changeBgColor(c.bgColor);
+    this.circlesViewerRef.changeFrontColor(c.circleColor);
+  }
+  
+  private setRandomLayout() {
+    let l = this.pickLayoutConfig();
+    this.circlesViewerRef.updateLayoutConfig(l);
+  }
+  
+  private setRandomGrain() {
+    this.circlesViewerRef.changeGrainDesity(this.rnd(-2.0, -0.1));
+    this.circlesViewerRef.changeGrainAngle(this.rnd(0, 2*Math.PI));
+  }
+  
+  private growNewLayout(time = 0) {
+    this.circlesViewerRef.newRandomLayout("", time);
   }
   
   // @ts-ignore
@@ -377,33 +401,50 @@ export default class Index extends Component<any, any> {
   
   private t_iloop: TimelineLite;
   
-  public stopInstallationLoop() {
+  public stopInstallation() {
     if (this.t_iloop) { this.t_iloop.kill(); }
   }
   
-  public startInstallationLoop() {
-    console.log('starting installation');
-    this.stopInstallationLoop()
-    
-    this.t_iloop = new TimelineLite();
+  public startInstallation(mode = 1, loop = false) {
+    console.log('installation: mode', mode);
+    this.stopInstallation();
+    this.t_iloop = new TimelineMax();
     let t = this.t_iloop;
     
-    t.add(() => {
-      let c = this.pickColors();
-      this.circlesViewerRef.changeBgColor(c.bgColor);
-      this.circlesViewerRef.changeFrontColor(c.circleColor);
-      let l = this.pickLayoutConfig();
-      console.log("layout config", l);
-      this.circlesViewerRef.updateLayoutConfig(l);
-      this.circlesViewerRef.changeGrainDesity(this.rnd(-2.0, -0.1));
-      this.circlesViewerRef.changeGrainAngle(this.rnd(0, 2*Math.PI));
-      this.circlesViewerRef.newRandomLayout("", this.rnd(0.5, 3.0));
-    });
-    t.add(() => {}, 3);
-    t.eventCallback('onComplete', () => {
-      console.log('restart');
-      t.restart();
-    });
+    switch (mode) {
+    case 1:
+      t.add(() => {
+        this.setRandomColors();
+        this.setRandomLayout();
+        this.setRandomGrain();
+        this.growNewLayout(this.rnd(0.5, 3.0));
+      });
+      t.add(() => {}, this.rndInt(3,5));
+      t.repeat( this.rndInt(4,6) );
+      break;
+      
+    case 2:
+      t.add(() => {
+        this.setRandomColors();
+        this.setRandomLayout();
+        this.setRandomGrain();
+        this.growNewLayout();
+      });
+      t.add(() => {}, this.rnd(0.3, 0.7));
+      t.repeat( this.rndInt(9,14) );
+      break;
+    }
+    
+    if (loop) {
+      t.eventCallback('onComplete', () => {
+        console.log("looping: mode " + mode);
+        this.startInstallation(mode, true);
+      });
+    } else {
+      t.eventCallback('onComplete', () => {
+        console.log("complete: mode " + mode);
+      });
+    }
   }
   
   
