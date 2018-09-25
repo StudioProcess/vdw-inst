@@ -58,5 +58,25 @@ export default {
     "14": {
       bgColor: "#D1D1D1",
       circleColor: "#1B1B23"
+    },
+    "15": {
+      bgColor: "#666666",
+      circleColor: "#3300FF"
+    },
+    "16": {
+      bgColor: "#c5e8cb",
+      circleColor: "#e31a1c"
+    },
+    "17": {
+      bgColor: "#EAC382",
+      circleColor: "#FCF0D1"
+    },
+    "18": {
+      bgColor: "#E63948",
+      circleColor: "#629DCE"
+    },
+    "19": {
+      bgColor: "#EBE6E9",
+      circleColor: "#FB2D48"
     }
   }
