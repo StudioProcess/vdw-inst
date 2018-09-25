@@ -371,6 +371,21 @@ export default class Index extends Component<any, any> {
     this.circlesViewerRef.changeGrainAngle(this.rnd(0, 2*Math.PI));
   }
   
+  private setRandomGravity() {
+    this.circlesViewerRef.updateGravity({
+      x: this.rnd(-1, 1), 
+      y: this.rnd(-1, 1),
+      scale: this.rnd(3/10000, 6/10000)
+    });
+  }
+  
+  private setFallGravity() {
+    this.circlesViewerRef.updateGravity({
+      x: 0, y: 1,
+      scale: this.rnd(6/10000, 15/10000)
+    });
+  }
+  
   private growNewLayout(time = 0) {
     this.circlesViewerRef.newRandomLayout("", time);
   }
@@ -405,7 +420,7 @@ export default class Index extends Component<any, any> {
     if (this.t_iloop) { this.t_iloop.kill(); }
   }
   
-  public startInstallation(mode = 1, loop = false) {
+  public startInstallation(mode = 3, loop = true) {
     console.log('installation: mode', mode);
     this.stopInstallation();
     this.t_iloop = new TimelineMax();
@@ -432,6 +447,21 @@ export default class Index extends Component<any, any> {
       });
       t.add(() => {}, this.rnd(0.3, 0.7));
       t.repeat( this.rndInt(9,14) );
+      break;
+      
+    case 3:
+      t.add(() => {
+        this.setRandomColors();
+        this.setRandomLayout();
+        this.setRandomGrain();
+        this.growNewLayout(this.rnd(1, 5.0));
+      });
+      t.add(() => {
+        // this.setRandomGravity();
+        this.setFallGravity();
+        this.circlesViewerRef.makeCirclesNonStatic();
+      }, this.rnd(2, 3));
+      t.add(() => {}, this.rnd(5,20));
       break;
     }
     
