@@ -54,5 +54,9 @@ export default {
     "13": {
       bgColor: "#000000",
       circleColor: "#FF2600"
+    },
+    "14": {
+      bgColor: "#D1D1D1",
+      circleColor: "#1B1B23"
     }
   }
