@@ -12,6 +12,7 @@ import Global from "./global";
 import {
   MessageTypes,
   IMessagePackage,
+  ILayoutGeneratorCongfig,
 } from "../components/types";
 
 import CirclesViewer from "../components/circleViewer/circleViewer";
@@ -21,6 +22,8 @@ import Logo from "../components/logo";
 import DividerLines from "../components/dividerLines";
 
 import {TimelineLite} from "gsap";
+
+import colors from "../components/colors";
 
 export default class Index extends Component<any, any> {
 
@@ -35,7 +38,7 @@ export default class Index extends Component<any, any> {
   private containerRef: HTMLDivElement;
 
   public componentDidMount() {
-    this.openControllerWindow();
+    // this.openControllerWindow();
 
     window.addEventListener("message", this.onReceiveMessage);
 
@@ -51,7 +54,8 @@ export default class Index extends Component<any, any> {
       this.fitViewport();
     });
     this.fitViewport();
-    // this.startScreensaverLoop();
+    
+    this.startInstallationLoop();
   }
 
   public componentWillUnmount() {
@@ -140,6 +144,10 @@ export default class Index extends Component<any, any> {
         
       case MessageTypes.startScreensaver:
         this.startScreensaverLoop();
+        break;
+        
+      case MessageTypes.startInstallation:
+        this.startInstallationLoop();
         break;
 
       case MessageTypes.dropText:
@@ -333,6 +341,62 @@ export default class Index extends Component<any, any> {
       t.restart();
     });
   }
+  
+  
+  
+  private pickColors() {
+    let keys = Object.keys(colors);
+    let idx = Math.floor(Math.random()*keys.length);
+    return colors[keys[idx]];
+  }
+  
+  private pickLayoutConfig(): ILayoutGeneratorCongfig {
+    return {
+      divisionStep: this.rndInt(3, 20),
+      cellDivide: this.rnd(0.1, 0.9),
+      cellFill: this.rnd(0.1, 0.9),
+      cellTwoDivisions: this.rnd(0, 1),
+      showPartial: false,
+    };
+  }
+  
+  private rnd(min, max) {
+    return min + Math.random() * (max-min);
+  }
+  private rndInt(min, max) {
+    return Math.floor( this.rnd(min, max));
+  }
+  
+  private t_iloop: TimelineLite;
+  
+  public stopInstallationLoop() {
+    if (this.t_iloop) { this.t_iloop.kill(); }
+  }
+  
+  public startInstallationLoop() {
+    console.log('starting installation');
+    this.stopInstallationLoop()
+    const grow = [0.5, 3.0];
+    
+    this.t_iloop = new TimelineLite();
+    let t = this.t_iloop;
+    
+    t.add(() => {
+      let c = this.pickColors();
+      this.circlesViewerRef.changeBgColor(c.bgColor);
+      this.circlesViewerRef.changeFrontColor(c.circleColor);
+      let l = this.pickLayoutConfig();
+      console.log("layout config", l);
+      // this.circlesViewerRef.updateLayoutConfig(l);
+      this.circlesViewerRef.newRandomLayout("", this.rnd(grow[0], grow[1]));
+    });
+    t.add(() => {}, 3);
+    t.eventCallback('onComplete', () => {
+      console.log('restart');
+      t.restart();
+    });
+  }
+  
   
   
   private fitViewport() {

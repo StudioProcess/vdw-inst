@@ -12,6 +12,7 @@ export enum MessageTypes {
   dropText,
   
   startScreensaver,
+  startInstallation,
 
   closeBounds,
 

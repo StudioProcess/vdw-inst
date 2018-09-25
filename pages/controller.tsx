@@ -91,6 +91,12 @@ export default class Controller extends Component<any, any> {
         </Head>
         
         <div className="container stage">
+          <h3>Installation</h3>
+          
+          <div className="button"
+            onClick={() => {this.onSendMessage(MessageTypes.startInstallation);}}
+          >start installation</div>
+          
           <h3>Screensaver</h3>
           
           <div className="button"
