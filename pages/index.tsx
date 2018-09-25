@@ -384,7 +384,6 @@ export default class Index extends Component<any, any> {
   public startInstallationLoop() {
     console.log('starting installation');
     this.stopInstallationLoop()
-    const grow = [0.5, 3.0];
     
     this.t_iloop = new TimelineLite();
     let t = this.t_iloop;
@@ -396,7 +395,9 @@ export default class Index extends Component<any, any> {
       let l = this.pickLayoutConfig();
       console.log("layout config", l);
       this.circlesViewerRef.updateLayoutConfig(l);
-      this.circlesViewerRef.newRandomLayout("", this.rnd(grow[0], grow[1]));
+      this.circlesViewerRef.changeGrainDesity(this.rnd(-2.0, -0.1));
+      this.circlesViewerRef.changeGrainAngle(this.rnd(0, 2*Math.PI));
+      this.circlesViewerRef.newRandomLayout("", this.rnd(0.5, 3.0));
     });
     t.add(() => {}, 3);
     t.eventCallback('onComplete', () => {
