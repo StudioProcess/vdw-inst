@@ -92,6 +92,10 @@ export default class Controller extends Component<any, any> {
         <div className="container installation">
           <h3>Installation</h3>
           
+          <div className="button"
+            onClick={() => {this.onSendMessage(MessageTypes.startInstallation, {mode:0, loop:false});}}
+          >start</div>
+          
           <div className="buttonContainer">
             loop
             <input

@@ -413,6 +413,19 @@ export default class Index extends Component<any, any> {
   private rndInt(min, max) {
     return Math.floor( this.rnd(min, max));
   }
+  private decide(chances = [0.5, 0.4], scale=1.0) {
+    let sums = [];
+    let sum = 0;
+    for (let i=0; i<chances.length; i++) {
+      sum += chances[i] / scale;
+      sums.push(sum);
+    }
+    let r = Math.random();
+    for (let i=0; i<sums.length; i++) {
+      if (r < sums[i]) return i;
+    }
+    return sums.length;
+  }
   
   private t_iloop: TimelineLite;
   
@@ -420,14 +433,20 @@ export default class Index extends Component<any, any> {
     if (this.t_iloop) { this.t_iloop.kill(); }
   }
   
-  public startInstallation(mode = 3, loop = true) {
-    console.log('installation: mode', mode);
+  public startInstallation(mode = 0, loop = true) {
+    console.log('installation: mode', mode > 0 ? mode : 'auto');
     this.stopInstallation();
     this.t_iloop = new TimelineMax();
     let t = this.t_iloop;
     
-    switch (mode) {
-    case 1:
+    let m = mode;
+    if (mode <= 0) { // auto mode
+      m = 1 + this.decide([60,15,25], 100);
+      console.log('auto chose mode', m);
+    }
+    
+    switch (m) {
+    case 1: // "normal"
       t.add(() => {
         this.setRandomColors();
         this.setRandomLayout();
@@ -438,7 +457,7 @@ export default class Index extends Component<any, any> {
       t.repeat( this.rndInt(4,6) );
       break;
       
-    case 2:
+    case 2: // "quickfire"
       t.add(() => {
         this.setRandomColors();
         this.setRandomLayout();
@@ -449,7 +468,7 @@ export default class Index extends Component<any, any> {
       t.repeat( this.rndInt(9,14) );
       break;
       
-    case 3:
+    case 3: // "slow drop"
       t.add(() => {
         this.setRandomColors();
         this.setRandomLayout();
@@ -465,7 +484,12 @@ export default class Index extends Component<any, any> {
       break;
     }
     
-    if (loop) {
+    if (mode <= 0) {
+      t.eventCallback('onComplete', () => {
+        console.log("looping: auto mode");
+        this.startInstallation(0, false);
+      });
+    } else if (loop) {
       t.eventCallback('onComplete', () => {
         console.log("looping: mode " + mode);
         this.startInstallation(mode, true);
