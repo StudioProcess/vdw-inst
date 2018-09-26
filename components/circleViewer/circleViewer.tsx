@@ -87,7 +87,7 @@ export default class StatueViewer extends Component<any, any> {
       // antialias: true,
       // alpha: true
     });
-    this.renderer.setPixelRatio(window.devicePixelRatio || 1.0);
+    // this.renderer.setPixelRatio(window.devicePixelRatio || 1.0);
     this.renderer.setClearColor(0xeb582f, 1.0);
 
     this.uniforms = {
@@ -201,7 +201,7 @@ export default class StatueViewer extends Component<any, any> {
   public updateFriction = (value: number) => {
     this.circlePhysics.updateFriction(value);
   }
-  
+
   public updateRestitution = (value: number) => {
     this.circlePhysics.updateRestitution(value);
   }
@@ -294,7 +294,7 @@ export default class StatueViewer extends Component<any, any> {
       },
     );
   }
-  
+
   public removeCircles(shrinkTime = 2.0) {
     TweenLite.fromTo(
       this.uniforms.fadeIn, // target

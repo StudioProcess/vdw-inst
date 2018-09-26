@@ -1,5 +1,5 @@
-const W = 1920;
-const H = 1080;
+const W = 3840;
+const H = 2164;
 
 
 import {
@@ -50,13 +50,13 @@ export default class Index extends Component<any, any> {
         this.toggleFullscreen();
       }
     });
-    
+
     window.addEventListener("resize", () => {
       this.fitViewport();
     });
     this.fitViewport();
     this.resolutionCallout();
-    
+
     this.startInstallation();
   }
 
@@ -72,7 +72,7 @@ export default class Index extends Component<any, any> {
       "titlebar=0,close=0,menubar=0,location=0,status=0,width=300,height=825,left=0,top=0,dependent=1,resizable=1,scrollbars=1",
     );
   }
-  
+
   private toggleFullscreen() {
     if (document.webkitFullscreenEnabled) { // Chrome, Opera, Safari
       if (!document.webkitFullscreenElement) {
@@ -84,9 +84,9 @@ export default class Index extends Component<any, any> {
       if (!document.mozFullScreenElement) {
       // @ts-ignore
         document.querySelector("body").mozRequestFullScreen();
-      } else { 
+      } else {
         // @ts-ignore
-        document.mozCancelFullScreen(); 
+        document.mozCancelFullScreen();
       }
     } else if (document.fullscreenEnabled) { // Standard, Edge
       if (!document.fullscreenElement) {
@@ -94,7 +94,7 @@ export default class Index extends Component<any, any> {
       } else { document.exitFullscreen(); }
     }
   }
-  
+
   private resolutionCallout() {
     let c = document.querySelector('canvas');
     console.log(`RENDERING ${c.width} x ${c.height}`);
@@ -117,7 +117,7 @@ export default class Index extends Component<any, any> {
       case MessageTypes.newLayout:
         this.circlesViewerRef.newRandomLayout(messagePackage.data.seed, messagePackage.data.growTime);
         break;
-        
+
       case MessageTypes.removeCircles:
         this.circlesViewerRef.removeCircles(messagePackage.data);
         break;
@@ -142,21 +142,21 @@ export default class Index extends Component<any, any> {
         this.textViewerRef.newText(messagePackage.data);
         // this.startTextLoop(messagePackage.data)
         break;
-      
+
       case MessageTypes.newTextWithParams:
         // this.textViewerRef.newText(messagePackage.data);
         this.startTextLoop(messagePackage.data.text)
         this.textViewerRef.updateTextSize(parseInt(messagePackage.data.size, 10));
         break;
-        
+
       case MessageTypes.startScreensaver:
         this.startScreensaverLoop();
         break;
-        
+
       case MessageTypes.startInstallation:
         this.startInstallation(messagePackage.data.mode, messagePackage.data.loop);
         break;
-        
+
       case MessageTypes.stopInstallation:
         this.stopInstallation();
         break;
@@ -255,13 +255,13 @@ export default class Index extends Component<any, any> {
         break;
     }
   }
-  
+
   private t_textloop: TimelineLite;
-  
+
   public stopTextLoop() {
     if (this.t_textloop) { this.t_textloop.kill(); }
   }
-  
+
   public startTextLoop(text:string) {
     console.log('text loop:', text);
     this.stopTextLoop();
@@ -270,18 +270,18 @@ export default class Index extends Component<any, any> {
     this.t_textloop = new TimelineLite();
     let t = this.t_textloop;
     let loopCounter = 0;
-    
+
     t.add(() => {
       this.textViewerRef.closeBottom();
       this.textViewerRef.newText(text);
     });
-    
+
     t.add(() => {
       this.textViewerRef.openBottom();
     }, 6);
-    
+
     t.add(() => {}, 8);
-    
+
     t.eventCallback('onComplete', () => {
       if (++loopCounter >= 2) {
         loopCounter = 0;
@@ -292,11 +292,11 @@ export default class Index extends Component<any, any> {
   }
 
   private t_ssloop: TimelineLite;
-  
+
   public stopScreensaverLoop() {
     if (this.t_ssloop) { this.t_ssloop.kill(); }
   }
-  
+
   public startScreensaverLoop() {
     console.log('starting screensaver');
     this.stopScreensaverLoop();
@@ -304,7 +304,7 @@ export default class Index extends Component<any, any> {
     this.textViewerRef.clearText();
     this.t_ssloop = new TimelineLite();
     let t = this.t_ssloop;
-    
+
     let grav = { x:0, y:1, scale: 10/10000 };
     let shiftGrav = new TimelineLite();
     shiftGrav.eventCallback('onUpdate', () => {
@@ -315,7 +315,7 @@ export default class Index extends Component<any, any> {
       const maxGrav = 6/10000;
       shiftGrav.clear();
       shiftGrav.set(grav, {
-        x: Math.random()-0.5, y: Math.random()-0.5, 
+        x: Math.random()-0.5, y: Math.random()-0.5,
         scale: minGrav+Math.random()*(maxGrav-minGrav)
       });
       for (let i=0; i<shifts; i++) {
@@ -327,7 +327,7 @@ export default class Index extends Component<any, any> {
       }
     }
     newShift();
-    
+
     t.add(() => {
       this.circlesViewerRef.closeBottom();
       this.circlesViewerRef.newRandomLayout("", 3);
@@ -352,50 +352,50 @@ export default class Index extends Component<any, any> {
       t.restart();
     });
   }
-  
-  
-  
+
+
+
   private pickColorConfig() {
     let keys = Object.keys(colors);
     let idx = Math.floor(Math.random()*keys.length);
     return colors[keys[idx]];
   }
-  
+
   private setRandomColors() {
     let c = this.pickColorConfig();
     this.circlesViewerRef.changeBgColor(c.bgColor);
     this.circlesViewerRef.changeFrontColor(c.circleColor);
   }
-  
+
   private setRandomLayout() {
     let l = this.pickLayoutConfig();
     this.circlesViewerRef.updateLayoutConfig(l);
   }
-  
+
   private setRandomGrain() {
     this.circlesViewerRef.changeGrainDesity(this.rnd(-2.0, -0.1));
     this.circlesViewerRef.changeGrainAngle(this.rnd(0, 2*Math.PI));
   }
-  
+
   private setRandomGravity() {
     this.circlesViewerRef.updateGravity({
-      x: this.rnd(-1, 1), 
+      x: this.rnd(-1, 1),
       y: this.rnd(-1, 1),
       scale: this.rnd(3/10000, 6/10000)
     });
   }
-  
+
   private setFallGravity() {
     this.circlesViewerRef.updateGravity({
       x: 0, y: 1,
       scale: this.rnd(6/10000, 15/10000)
     });
   }
-  
+
   private growNewLayout(time = 0) {
     this.circlesViewerRef.newRandomLayout("", time);
   }
-  
+
   // @ts-ignore
   private randomLayoutConfig(): ILayoutGeneratorCongfig {
     return {
@@ -406,13 +406,13 @@ export default class Index extends Component<any, any> {
       showPartial: false,
     };
   }
-  
+
   private pickLayoutConfig(): ILayoutGeneratorCongfig {
     let keys = Object.keys(layouts);
     let idx = Math.floor(Math.random()*keys.length);
     return layouts[keys[idx]];
   }
-  
+
   private rnd(min, max) {
     return min + Math.random() * (max-min);
   }
@@ -432,25 +432,25 @@ export default class Index extends Component<any, any> {
     }
     return sums.length;
   }
-  
+
   private t_iloop: TimelineLite;
-  
+
   public stopInstallation() {
     if (this.t_iloop) { this.t_iloop.kill(); }
   }
-  
+
   public startInstallation(mode = 0, loop = true) {
     console.log('installation: mode', mode > 0 ? mode : 'auto');
     this.stopInstallation();
     this.t_iloop = new TimelineMax();
     let t = this.t_iloop;
-    
+
     let m = mode;
     if (mode <= 0) { // auto mode
       m = 1 + this.decide([60,15,25], 100);
       console.log('auto chose mode', m);
     }
-    
+
     switch (m) {
     case 1: // "normal"
       t.add(() => {
@@ -462,7 +462,7 @@ export default class Index extends Component<any, any> {
       t.add(() => {}, this.rndInt(3,5));
       t.repeat( this.rndInt(4,6) );
       break;
-      
+
     case 2: // "quickfire"
       t.add(() => {
         this.setRandomColors();
@@ -473,7 +473,7 @@ export default class Index extends Component<any, any> {
       t.add(() => {}, this.rnd(0.3, 0.7));
       t.repeat( this.rndInt(9,14) );
       break;
-      
+
     case 3: // "slow drop"
       t.add(() => {
         this.setRandomColors();
@@ -489,7 +489,7 @@ export default class Index extends Component<any, any> {
       t.add(() => {}, this.rnd(5,20));
       break;
     }
-    
+
     if (mode <= 0) {
       t.eventCallback('onComplete', () => {
         console.log("looping: auto mode");
@@ -506,9 +506,9 @@ export default class Index extends Component<any, any> {
       });
     }
   }
-  
-  
-  
+
+
+
   private fitViewport() {
     if (window.innerWidth/window.innerHeight < W/H) {
       // fit width
@@ -541,7 +541,7 @@ export default class Index extends Component<any, any> {
             position: "relative",
           }}
         >
-          
+
           <div className="webGLContainer">
             <CirclesViewer
               ref={(ref) => {this.circlesViewerRef = ref; }}
@@ -577,11 +577,11 @@ export default class Index extends Component<any, any> {
             top:50%;
             left:50%;
           }
-          
+
           .container {
             transform: translate(-50%,-50%);
           }
-          
+
           .webGLContainer {
             width: 100%;
             height: 100%;
