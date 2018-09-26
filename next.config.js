@@ -1,11 +1,11 @@
 const withTypescript = require("@zeit/next-typescript");
 const withProgressBar = require("next-progressbar");
 const path = require("path");
+const assetPrefix = process.env.ASSET_PREFIX;
 
 module.exports = withProgressBar(
   withTypescript({
-    assetPrefix: process.env.NODE_ENV === 'production' ? '/vdw-inst' : '', // for deployment to gh-pages (docs folder)
-    
+    assetPrefix: assetPrefix ? assetPrefix : '',
     webpack: (config) => {
       // Fixes npm packages that depend on `fs` module
       config.node = {
