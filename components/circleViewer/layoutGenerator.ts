@@ -150,6 +150,10 @@ export function runOnCell(
   }
 }
 
+export function getFillCount() {
+  return fillCount;
+}
+
 export function decide(
   chance = 0.5,
 ) {

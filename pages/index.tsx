@@ -388,23 +388,30 @@ export default class Index extends Component<any, any> {
   }
   
   //@ts-ignore
-  private setRandomGravity() {
+  private setRandomGravity(scale=1) {
     this.circlesViewerRef.updateGravity({
       x: this.rnd(-1, 1),
       y: this.rnd(-1, 1),
-      scale: this.rnd(3/10000, 6/10000)
+      scale: this.rnd(3/10000*scale, 6/10000*scale)
     });
   }
 
-  private setFallGravity() {
+  private setFallGravity(scale=1) {
     this.circlesViewerRef.updateGravity({
       x: 0, y: 1,
-      scale: this.rnd(6/10000, 15/10000)
+      scale: this.rnd(6/10000*scale, 15/10000*scale)
     });
   }
+  
+  private setDefaultPhysics() {
+    this.circlesViewerRef.updateGravity({x: 0, y: 1, scale: 10/10000});
+    this.circlesViewerRef.updateFriction(0.1);
+    this.circlesViewerRef.updateRestitution(0);
+  }
 
-  private growNewLayout(time = 0) {
+  private growNewLayout(time = 0): number {
     this.circlesViewerRef.newRandomLayout("", time);
+    return this.circlesViewerRef.getFillCount();
   }
 
   // @ts-ignore
@@ -483,23 +490,25 @@ export default class Index extends Component<any, any> {
         this.setRandomGrain();
         this.growNewLayout();
       });
-      t.add(() => {}, 0.4);
+      t.add(() => {}, this.rnd(0.2, 0.4));
       t.repeat( 30 );
       break;
 
-    case 3: // "slow drop"
+    case 3: // "drop"
       t.add(() => {
         this.setRandomColors();
         this.setRandomLayout();
         this.setRandomGrain();
-        this.growNewLayout(this.rnd(3.0, 5.0));
+        let n = this.growNewLayout(this.rnd(3.0, 5.0));
+        this.setDefaultPhysics();
+        if (n <= 10) {
+          this.setRandomGravity(1.2);
+        }
       });
       t.add(() => {
-        // this.setRandomGravity();
-        this.setFallGravity();
         this.circlesViewerRef.makeCirclesNonStatic();
-      }, this.rnd(3, 4));
-      t.add(() => {}, this.rnd(7,15));
+      }, this.rnd(5, 7));
+      t.add(() => {}, this.rnd(10,15));
       break;
     }
 

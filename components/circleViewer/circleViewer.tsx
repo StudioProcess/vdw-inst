@@ -16,7 +16,7 @@ import {ILayoutGeneratorCongfig, IGravityConfig} from "../types";
 
 import SceneHandler from "./sceneHandler";
 import CirclePhysics from "./circlePhysics";
-import {generateLayout, updateConfig} from "./layoutGenerator";
+import {generateLayout, updateConfig, getFillCount} from "./layoutGenerator";
 
 import CheckWebGLSupport from "../../utilities/checkWebGLSupport/CheckWebGLSupport";
 
@@ -293,6 +293,10 @@ export default class StatueViewer extends Component<any, any> {
         ease: "Quad.easeOut",
       },
     );
+  }
+  
+  public getFillCount() {
+    return getFillCount();
   }
 
   public removeCircles(shrinkTime = 2.0) {
