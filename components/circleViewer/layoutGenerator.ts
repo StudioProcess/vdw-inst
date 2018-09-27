@@ -40,6 +40,9 @@ let baseH = 100;
 let halfBaseW = baseW * 0.5;
 let halfBaseH = baseH * 0.5;
 
+let signX = 1;
+let signY = 1;
+
 export function generateLayout(
   bounds: {width: number, height: number},
   seed = 0,
@@ -52,6 +55,10 @@ export function generateLayout(
 
   halfBaseW = baseW * 0.5;
   halfBaseH = baseH * 0.5;
+  
+  // choose random signs
+  signX = Math.random() < 0.5 ? 1 : -1;
+  signY = Math.random() < 0.5 ? 1 : -1;
   
   fillCount = 0;
   while (fillCount < minFilled) {
@@ -116,8 +123,8 @@ export function runOnCell(
       const radius = width * 0.5;
 
       positionArray.push({
-        x: (left + radius) - halfBaseW,
-        y: (top  + radius) - halfBaseH,
+        x: signX * ( (left + radius) - halfBaseW ),
+        y: signY * ( (top  + radius) - halfBaseH ),
         radius,
       });
 
