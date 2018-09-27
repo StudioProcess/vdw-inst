@@ -38,6 +38,8 @@ export default class Controller extends Component<any, any> {
     cellFill: 0.7,
     cellTwoDivisions: 0.5,
     showPartial: false,
+    useW: 1,
+    useH: 1
   };
 
   private gravityConfigCircles: IGravityConfig = {
@@ -112,7 +114,8 @@ export default class Controller extends Component<any, any> {
           >mode 2</div>
           <div className="button"
             onClick={() => {this.onSendMessage(MessageTypes.startInstallation, {mode:3, loop:this.loopRef.checked});}}
-          >mode 3</div>
+          >mode 3</div><br/>
+          
           <div className="button"
             onClick={() => {this.onSendMessage(MessageTypes.stopInstallation);}}
           >stop</div>

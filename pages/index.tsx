@@ -360,6 +360,14 @@ export default class Index extends Component<any, any> {
     let idx = Math.floor(Math.random()*keys.length);
     return colors[keys[idx]];
   }
+  
+  //@ts-ignore
+  private pickColorConfigRange(from:number, toIncl:number) {
+    let keys = Object.keys(colors);
+    let idx = Math.floor( from + Math.random()*(toIncl-from+1) );
+    console.log("picked idx", idx);
+    return colors[keys[idx]];
+  }
 
   private setRandomColors() {
     let c = this.pickColorConfig();
@@ -369,6 +377,8 @@ export default class Index extends Component<any, any> {
 
   private setRandomLayout() {
     let l = this.pickLayoutConfig();
+    l.useW = 1.0;
+    l.useH = 1.0;
     this.circlesViewerRef.updateLayoutConfig(l);
   }
 
@@ -376,7 +386,8 @@ export default class Index extends Component<any, any> {
     this.circlesViewerRef.changeGrainDesity(this.rnd(-2.0, -0.1));
     this.circlesViewerRef.changeGrainAngle(this.rnd(0, 2*Math.PI));
   }
-
+  
+  //@ts-ignore
   private setRandomGravity() {
     this.circlesViewerRef.updateGravity({
       x: this.rnd(-1, 1),
@@ -404,6 +415,8 @@ export default class Index extends Component<any, any> {
       cellFill: this.rnd(0.1, 0.9),
       cellTwoDivisions: this.rnd(0, 1),
       showPartial: false,
+      useW: 1.0,
+      useH: 1.0
     };
   }
 
