@@ -108,19 +108,19 @@ export default class Controller extends Component<any, any> {
           
           <div className="button"
             onClick={() => {this.onSendMessage(MessageTypes.startInstallation, {mode:1, loop:this.loopRef.checked});}}
-          >mode 1</div>
+          >mode 1: normal</div>
           <div className="button"
             onClick={() => {this.onSendMessage(MessageTypes.startInstallation, {mode:2, loop:this.loopRef.checked});}}
-          >mode 2</div>
+          >mode 2: quickfire</div>
           <div className="button"
             onClick={() => {this.onSendMessage(MessageTypes.startInstallation, {mode:3, loop:this.loopRef.checked});}}
-          >mode 3</div>
+          >mode 3: single color quickfire</div>
           <div className="button"
             onClick={() => {this.onSendMessage(MessageTypes.startInstallation, {mode:4, loop:this.loopRef.checked});}}
-          >mode 4</div>
+          >mode 4: restricted quickfire</div>
           <div className="button"
             onClick={() => {this.onSendMessage(MessageTypes.startInstallation, {mode:5, loop:this.loopRef.checked});}}
-          >mode 5</div>
+          >mode 5: drop</div>
           <div className="button"
             onClick={() => {this.onSendMessage(MessageTypes.startInstallation, {mode:6, loop:this.loopRef.checked});}}
           >mode 6</div>

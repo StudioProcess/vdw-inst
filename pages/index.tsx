@@ -375,10 +375,14 @@ export default class Index extends Component<any, any> {
     this.circlesViewerRef.changeFrontColor(c.circleColor);
   }
 
-  private setRandomLayout() {
+  private setRandomLayout(restricedChance = 0.2) {
     let l = this.pickLayoutConfig();
     l.useW = 1.0;
     l.useH = 1.0;
+    if (Math.random() < restricedChance) { // make a restriceted layout
+      l.useW = this.rnd(0.4, 0.8); // between 40 and 80 percent size
+      l.useH = l.useW;
+    }
     this.circlesViewerRef.updateLayoutConfig(l);
   }
 
@@ -399,7 +403,7 @@ export default class Index extends Component<any, any> {
   private setFallGravity(scale=1) {
     this.circlesViewerRef.updateGravity({
       x: 0, y: 1,
-      scale: this.rnd(6/10000*scale, 15/10000*scale)
+      scale: this.rnd(8/10000*scale, 15/10000*scale)
     });
   }
   
@@ -468,10 +472,11 @@ export default class Index extends Component<any, any> {
     let m = mode;
     if (mode <= 0) { // auto mode
       m = 1 + this.decide([
-        47.5, // normal
-        7.5,  // quickfire
-        7.5,  // single color quickfire
-        37.5  // drop
+        47.5, // 0: normal
+        5,    // 1: quickfire
+        5,    // 2: single color quickfire
+        5,    // 3: restricted quickfire
+        37.5  // 4: drop
       ], 100);
       console.log('auto chose mode', m);
     }
@@ -502,21 +507,33 @@ export default class Index extends Component<any, any> {
     case 3: // single color "quickfire"
         this.setRandomColors();
       t.add(() => {
-        this.setRandomLayout();
+        this.setRandomLayout(0.5);
         this.setRandomGrain();
         this.growNewLayout();
       });
       t.add(() => {}, this.rnd(0.2, 0.4));
-      t.repeat( 30 );
+      t.repeat( 20 );
+      break;
+      
+    case 4: // restricted "quickfire"
+        this.setRandomColors();
+      t.add(() => {
+        this.setRandomLayout(1);
+        this.setRandomGrain();
+        this.growNewLayout();
+      });
+      t.add(() => {}, this.rnd(0.2, 0.4));
+      t.repeat( 20 );
       break;
 
-    case 3: // "drop"
+    case 5: // "drop"
       t.add(() => {
         this.setRandomColors();
         this.setRandomLayout();
         this.setRandomGrain();
         let n = this.growNewLayout(this.rnd(3.0, 5.0));
         this.setDefaultPhysics();
+        this.setFallGravity();
         if (n <= 10) {
           this.setRandomGravity(1.2);
         }
