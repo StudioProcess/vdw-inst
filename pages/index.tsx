@@ -460,7 +460,7 @@ export default class Index extends Component<any, any> {
 
     let m = mode;
     if (mode <= 0) { // auto mode
-      m = 1 + this.decide([60,15,25], 100);
+      m = 1 + this.decide([47.5,15,37.5], 100);
       console.log('auto chose mode', m);
     }
 
@@ -470,9 +470,9 @@ export default class Index extends Component<any, any> {
         this.setRandomColors();
         this.setRandomLayout();
         this.setRandomGrain();
-        this.growNewLayout(this.rnd(0.5, 3.0));
+        this.growNewLayout(this.rnd(3.0, 5.0));
       });
-      t.add(() => {}, this.rndInt(3,5));
+      t.add(() => {}, this.rndInt(3,6));
       t.repeat( this.rndInt(4,6) );
       break;
 
@@ -483,8 +483,8 @@ export default class Index extends Component<any, any> {
         this.setRandomGrain();
         this.growNewLayout();
       });
-      t.add(() => {}, this.rnd(0.3, 0.7));
-      t.repeat( this.rndInt(9,14) );
+      t.add(() => {}, 0.4);
+      t.repeat( 30 );
       break;
 
     case 3: // "slow drop"
@@ -492,14 +492,14 @@ export default class Index extends Component<any, any> {
         this.setRandomColors();
         this.setRandomLayout();
         this.setRandomGrain();
-        this.growNewLayout(this.rnd(1, 5.0));
+        this.growNewLayout(this.rnd(3.0, 5.0));
       });
       t.add(() => {
         // this.setRandomGravity();
         this.setFallGravity();
         this.circlesViewerRef.makeCirclesNonStatic();
-      }, this.rnd(2, 3));
-      t.add(() => {}, this.rnd(5,20));
+      }, this.rnd(3, 4));
+      t.add(() => {}, this.rnd(7,15));
       break;
     }
 
