@@ -7,7 +7,8 @@
     "export-gh": "next build && env ASSET_PREFIX=/vdw-inst next export -o docs && touch docs/.nojekyll",
     "export": "npm run export-dist && npm run export-gh",
     "exportStaging": "next build && next export -o dist && gulp gzipDist && aws s3 sync ./dist s3://vdw-tool.thisotherthing.co --delete --acl public-read --content-encoding gzip --cache-control max-age=2592000",
-    "start": "next"
+    "start": "next",
+    "live": "live-server dist"
   },
   "dependencies": {
     "array-shuffle": "^1.0.1",
@@ -33,6 +34,7 @@
     "@zeit/next-typescript": "0.0.10",
     "gulp": "^3.9.1",
     "gulp-gzip": "^1.4.2",
+    "live-server": "^1.2.0",
     "next-progressbar": "^1.0.0",
     "node-sass": "^4.9.0",
     "raw-loader": "^0.5.1",
