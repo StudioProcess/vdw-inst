@@ -80,7 +80,7 @@ export default {
       circleColor: "#FB2D48"
     },
     "20": {
-      bgColor: "#EEEEEE",
+      bgColor: "#bebebe",
       circleColor: "#FFFFFF"
     },
     "21": {

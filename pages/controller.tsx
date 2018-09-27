@@ -123,7 +123,7 @@ export default class Controller extends Component<any, any> {
           >mode 5: drop</div>
           <div className="button"
             onClick={() => {this.onSendMessage(MessageTypes.startInstallation, {mode:6, loop:this.loopRef.checked});}}
-          >mode 6</div>
+          >mode 6: drop with compass gravity</div>
           <div className="button"
             onClick={() => {this.onSendMessage(MessageTypes.startInstallation, {mode:7, loop:this.loopRef.checked});}}
           >mode 7</div>

@@ -399,6 +399,14 @@ export default class Index extends Component<any, any> {
       scale: this.rnd(3/10000*scale, 6/10000*scale)
     });
   }
+  
+  private setRandomCompassGravity(scale = 1, dirs = 8) {
+    let a = 2*Math.PI/dirs * this.rndInt(0, dirs); // desired angle
+    this.circlesViewerRef.updateGravity({
+      x: Math.cos(a), y: Math.sin(a),
+      scale: this.rnd(8/10000*scale, 15/10000*scale)
+    });
+  }
 
   private setFallGravity(scale=1) {
     this.circlesViewerRef.updateGravity({
@@ -472,11 +480,12 @@ export default class Index extends Component<any, any> {
     let m = mode;
     if (mode <= 0) { // auto mode
       m = 1 + this.decide([
-        47.5, // 0: normal
-        5,    // 1: quickfire
-        5,    // 2: single color quickfire
-        5,    // 3: restricted quickfire
-        37.5  // 4: drop
+        47.5, // 1: normal
+        5,    // 2: quickfire
+        5,    // 3: single color quickfire
+        5,    // 4: restricted quickfire
+        20,   // 5: drop
+        17.5  // 6: drop with compass gravity
       ], 100);
       console.log('auto chose mode', m);
     }
@@ -543,6 +552,21 @@ export default class Index extends Component<any, any> {
       }, this.rnd(5, 7));
       t.add(() => {}, this.rnd(10,15));
       break;
+      
+      case 6: // "drop" with random gravity
+        t.add(() => {
+          this.setRandomColors();
+          this.setRandomLayout();
+          this.setRandomGrain();
+          this.growNewLayout(this.rnd(3.0, 5.0));
+          this.setDefaultPhysics();
+          this.setRandomCompassGravity();
+        });
+        t.add(() => {
+          this.circlesViewerRef.makeCirclesNonStatic();
+        }, this.rnd(5, 7));
+        t.add(() => {}, this.rnd(10,15));
+        break;
     }
 
     if (mode <= 0) {
