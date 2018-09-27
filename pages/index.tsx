@@ -21,7 +21,7 @@ import TextViewer from "../components/textViewer/textViewer";
 import Logo from "../components/logo";
 import DividerLines from "../components/dividerLines";
 
-import {TimelineLite, TimelineMax} from "gsap";
+import {TweenLite, TimelineLite, TimelineMax} from "gsap";
 
 import colors from "../components/colors";
 import layouts from "../components/presets";
@@ -386,9 +386,14 @@ export default class Index extends Component<any, any> {
     this.circlesViewerRef.updateLayoutConfig(l);
   }
 
+  //@ts-ignore
   private setRandomGrain() {
     this.circlesViewerRef.changeGrainDesity(this.rnd(-2.0, -0.1));
     this.circlesViewerRef.changeGrainAngle(this.rnd(0, 2*Math.PI));
+  }
+  
+  private setRandomGrainDensity() {
+    this.circlesViewerRef.changeGrainDesity(this.rnd(-2.0, -0.1));
   }
   
   //@ts-ignore
@@ -444,6 +449,22 @@ export default class Index extends Component<any, any> {
     let idx = Math.floor(Math.random()*keys.length);
     return layouts[keys[idx]];
   }
+  
+  private t_rotateGrain: TweenLite;
+  private rotateGrain() {
+    if (this.t_rotateGrain) this.t_rotateGrain.kill();
+    let obj = { dir: this.rnd(-Math.PI, Math.PI) };
+    this.t_rotateGrain = TweenLite.to(obj, this.rnd(5, 10), {
+      dir: obj.dir + 2*Math.PI*Math.sign(obj.dir),
+      ease: "easeNoneLinear"
+    });
+    this.t_rotateGrain.eventCallback('onUpdate', () => {
+      this.circlesViewerRef.changeGrainAngle(obj.dir);
+    });
+    this.t_rotateGrain.eventCallback('onComplete', () => {
+      this.t_rotateGrain.restart();
+    });
+  }
 
   private rnd(min, max) {
     return min + Math.random() * (max-min);
@@ -489,13 +510,15 @@ export default class Index extends Component<any, any> {
       ], 100);
       console.log('auto chose mode', m);
     }
-
+    
+    this.rotateGrain();
+    
     switch (m) {
     case 1: // "normal"
       t.add(() => {
         this.setRandomColors();
         this.setRandomLayout();
-        this.setRandomGrain();
+        this.setRandomGrainDensity();
         this.growNewLayout(this.rnd(3.0, 5.0));
       });
       t.add(() => {}, this.rndInt(3,6));
@@ -506,7 +529,7 @@ export default class Index extends Component<any, any> {
       t.add(() => {
         this.setRandomColors();
         this.setRandomLayout();
-        this.setRandomGrain();
+        this.setRandomGrainDensity();
         this.growNewLayout();
       });
       t.add(() => {}, this.rnd(0.2, 0.4));
@@ -517,7 +540,7 @@ export default class Index extends Component<any, any> {
         this.setRandomColors();
       t.add(() => {
         this.setRandomLayout(0.5);
-        this.setRandomGrain();
+        this.setRandomGrainDensity();
         this.growNewLayout();
       });
       t.add(() => {}, this.rnd(0.2, 0.4));
@@ -528,7 +551,7 @@ export default class Index extends Component<any, any> {
         this.setRandomColors();
       t.add(() => {
         this.setRandomLayout(1);
-        this.setRandomGrain();
+        this.setRandomGrainDensity();
         this.growNewLayout();
       });
       t.add(() => {}, this.rnd(0.2, 0.4));
@@ -539,7 +562,7 @@ export default class Index extends Component<any, any> {
       t.add(() => {
         this.setRandomColors();
         this.setRandomLayout();
-        this.setRandomGrain();
+        this.setRandomGrainDensity();
         let n = this.growNewLayout(this.rnd(3.0, 5.0));
         this.setDefaultPhysics();
         this.setFallGravity();
@@ -557,7 +580,7 @@ export default class Index extends Component<any, any> {
         t.add(() => {
           this.setRandomColors();
           this.setRandomLayout();
-          this.setRandomGrain();
+          this.setRandomGrainDensity();
           this.growNewLayout(this.rnd(3.0, 5.0));
           this.setDefaultPhysics();
           this.setRandomCompassGravity();
