@@ -4,7 +4,7 @@ const seedRandom = require("seed-random");
 import {ILayoutItem} from "../types";
 
 const divisionSteps = [2, 3, 4, 6, 8, 9, 12, 16, 18, 24, 27, 36, 48, 54, 64, 72, 81, 96, 108, 128, 144, 162, 192, 216, 243, 256];
-const minFilled = 1; // minimum number of filled elements
+const minFilled = 3; // minimum number of filled elements
 
 let divisionStep = 6;
 // chances
