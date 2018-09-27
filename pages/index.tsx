@@ -480,12 +480,12 @@ export default class Index extends Component<any, any> {
     let m = mode;
     if (mode <= 0) { // auto mode
       m = 1 + this.decide([
-        47.5, // 1: normal
-        5,    // 2: quickfire
-        5,    // 3: single color quickfire
-        5,    // 4: restricted quickfire
-        20,   // 5: drop
-        17.5  // 6: drop with compass gravity
+        40,   // 1: normal
+        6,    // 2: quickfire
+        6,    // 3: single color quickfire
+        6,    // 4: restricted quickfire
+        22,   // 5: drop
+        20    // 6: drop with compass gravity
       ], 100);
       console.log('auto chose mode', m);
     }
