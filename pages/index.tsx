@@ -467,7 +467,12 @@ export default class Index extends Component<any, any> {
 
     let m = mode;
     if (mode <= 0) { // auto mode
-      m = 1 + this.decide([47.5,15,37.5], 100);
+      m = 1 + this.decide([
+        47.5, // normal
+        7.5,  // quickfire
+        7.5,  // single color quickfire
+        37.5  // drop
+      ], 100);
       console.log('auto chose mode', m);
     }
 
@@ -486,6 +491,17 @@ export default class Index extends Component<any, any> {
     case 2: // "quickfire"
       t.add(() => {
         this.setRandomColors();
+        this.setRandomLayout();
+        this.setRandomGrain();
+        this.growNewLayout();
+      });
+      t.add(() => {}, this.rnd(0.2, 0.4));
+      t.repeat( 30 );
+      break;
+      
+    case 3: // single color "quickfire"
+        this.setRandomColors();
+      t.add(() => {
         this.setRandomLayout();
         this.setRandomGrain();
         this.growNewLayout();
