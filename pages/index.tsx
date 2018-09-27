@@ -47,9 +47,17 @@ export default class Index extends Component<any, any> {
       if (e.key === "h") { // h
         this.openControllerWindow();
       } else if (e.key === "f") { // f
-        this.toggleFullscreen();
+        this.enterFullscreen();
       }
     });
+    
+    document.addEventListener("dblclick", () => {
+      this.enterFullscreen();
+    });
+    
+    window.addEventListener("contextmenu", (e) => {
+      e.preventDefault();
+    }, false);
 
     window.addEventListener("resize", () => {
       this.fitViewport();
@@ -73,25 +81,44 @@ export default class Index extends Component<any, any> {
     );
   }
 
-  private toggleFullscreen() {
+  // private toggleFullscreen() {
+  //   if (document.webkitFullscreenEnabled) { // Chrome, Opera, Safari
+  //     if (!document.webkitFullscreenElement) {
+  //       document.querySelector("body").webkitRequestFullscreen();
+  //     } else { document.webkitExitFullscreen(); }
+  //   // @ts-ignore
+  //   } else if (document.mozFullScreenEnabled) { // Firefox
+  //   // @ts-ignore
+  //     if (!document.mozFullScreenElement) {
+  //     // @ts-ignore
+  //       document.querySelector("body").mozRequestFullScreen();
+  //     } else {
+  //       // @ts-ignore
+  //       document.mozCancelFullScreen();
+  //     }
+  //   } else if (document.fullscreenEnabled) { // Standard, Edge
+  //     if (!document.fullscreenElement) {
+  //       document.querySelector("body").requestFullscreen();
+  //     } else { document.exitFullscreen(); }
+  //   }
+  // }
+  
+  private enterFullscreen() {
     if (document.webkitFullscreenEnabled) { // Chrome, Opera, Safari
       if (!document.webkitFullscreenElement) {
         document.querySelector("body").webkitRequestFullscreen();
-      } else { document.webkitExitFullscreen(); }
+      }
     // @ts-ignore
     } else if (document.mozFullScreenEnabled) { // Firefox
     // @ts-ignore
       if (!document.mozFullScreenElement) {
       // @ts-ignore
         document.querySelector("body").mozRequestFullScreen();
-      } else {
-        // @ts-ignore
-        document.mozCancelFullScreen();
       }
     } else if (document.fullscreenEnabled) { // Standard, Edge
       if (!document.fullscreenElement) {
         document.querySelector("body").requestFullscreen();
-      } else { document.exitFullscreen(); }
+      }
     }
   }
 
