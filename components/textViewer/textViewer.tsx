@@ -1,6 +1,6 @@
 const SPAWN_ON_STARTUP = false;
 const TEXT = "A City\nFull of\nDesign";
-const SIZE = 200;
+const SIZE = 250;
 
 import {
   Component,
@@ -17,9 +17,9 @@ import {IGravityConfig} from "../types";
 
 import {overrideWidth, overrideHeight} from "../../overrideSize";
 
-let textStrokeColor = "#000000";
+let textStrokeColor = "#fff";
 
-let textFillColor = "#000000";
+let textFillColor = "#fff";
 let textShowFill = false;
 
 export default class StatueViewer extends Component<any, any> {
@@ -59,8 +59,8 @@ export default class StatueViewer extends Component<any, any> {
         } else {
           this.font = font;
           this.svgs = [];
+          this.updateTextSize(SIZE);
           if (SPAWN_ON_STARTUP) {
-            this.updateTextSize(SIZE);
             this.newText(TEXT);
           }
         }

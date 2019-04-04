@@ -174,7 +174,7 @@ export default class Controller extends Component<any, any> {
             text stroke color
             <input
               type="color"
-              defaultValue="#000000"
+              defaultValue="#fff"
               onChange={(e) => {
                   this.onSendMessage(MessageTypes.updateTextStrokeColor, e.target.value);
               }}
@@ -184,7 +184,7 @@ export default class Controller extends Component<any, any> {
             text fill color
             <input
               type="color"
-              defaultValue="#000000"
+              defaultValue="#fff"
               onChange={(e) => {
                   this.onSendMessage(MessageTypes.updateTextFillColor, e.target.value);
               }}
@@ -498,7 +498,7 @@ export default class Controller extends Component<any, any> {
                 size
                 <input
                 type="number"
-                defaultValue="80"
+                defaultValue="300"
                 onChange={(e) => {
                   if (Number.isInteger(parseInt(e.target.value, 10))) {
                     this.onSendMessage(MessageTypes.updateTextSize, e.target.value);

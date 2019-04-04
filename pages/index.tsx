@@ -744,7 +744,7 @@ export default class Index extends Component<any, any> {
             width:300px;
             height:96vh;
             background-color:white;
-            opacity:0.8;
+            opacity:0.95;
           }
           .container {
             transform: translate(-50%,-50%);
