@@ -1,5 +1,5 @@
-const W = 3840;
-const H = 2160;
+const W = 1920;
+const H = 1080;
 
 
 import {

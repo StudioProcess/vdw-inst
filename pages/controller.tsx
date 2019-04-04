@@ -129,17 +129,6 @@ export default class Controller extends Component<any, any> {
           <div className="button"
             onClick={() => {this.onSendMessage(MessageTypes.startInstallation, {mode:6, loop:this.loopRef.checked});}}
           >mode 6: drop with compass gravity</div>
-          <div className="button"
-            onClick={() => {this.onSendMessage(MessageTypes.startInstallation, {mode:7, loop:this.loopRef.checked});}}
-          >mode 7</div>
-          <div className="button"
-            onClick={() => {this.onSendMessage(MessageTypes.startInstallation, {mode:8, loop:this.loopRef.checked});}}
-          >mode 8</div><br/>
-          
-          <div className="button"
-            onClick={() => {this.onSendMessage(MessageTypes.stopInstallation);}}
-          >stop</div>
-          
           
           <div className="buttonContainer" style={{fontWeight:"bold"}}>
             ADVANCED
