@@ -28,7 +28,7 @@ import layouts from "../components/presets";
 
 export default class Index extends Component<any, any> {
 
-  private controllerWindow: Window;
+  // private controllerWindow: Window;
   private circlesViewerRef: CirclesViewer;
   private textViewerRef: TextViewer;
 
@@ -37,19 +37,24 @@ export default class Index extends Component<any, any> {
 
   private fullscreenButtonRef: HTMLDivElement;
   private containerRef: HTMLDivElement;
+  
+  private hudRef: HTMLIFrameElement;
 
   public componentDidMount() {
     // this.openControllerWindow();
+    // this.controllerWindow = window;
 
     window.addEventListener("message", this.onReceiveMessage);
 
-    window.addEventListener("keydown", (e) => {
+    let onKeydown = (e) => {
       if (e.key === "h") { // h
-        this.openControllerWindow();
+        this.toggleHUD();
       } else if (e.key === "f") { // f
         this.enterFullscreen();
-      }
-    });
+      };
+    };
+    window.addEventListener("keydown", onKeydown);
+    this.hudRef.contentWindow.addEventListener("keydown", onKeydown); // handle key events on hud as well
     
     document.addEventListener("dblclick", () => {
       this.enterFullscreen();
@@ -70,15 +75,25 @@ export default class Index extends Component<any, any> {
 
   public componentWillUnmount() {
     window.removeEventListener("message", this.onReceiveMessage);
-    this.controllerWindow.close();
+    // this.controllerWindow.close();
   }
 
-  private openControllerWindow = () => {
-    this.controllerWindow = window.open(
-      "./controller",
-      "controller",
-      "titlebar=0,close=0,menubar=0,location=0,status=0,width=300,height=825,left=0,top=0,dependent=1,resizable=1,scrollbars=1",
-    );
+  // private openControllerWindow = () => {
+  //   this.controllerWindow = window.open(
+  //     "./controller",
+  //     "controller",
+  //     "titlebar=0,close=0,menubar=0,location=0,status=0,width=300,height=825,left=0,top=0,dependent=1,resizable=1,scrollbars=1",
+  //   );
+  // }
+  
+  private toggleHUD = () => {
+    if (this.hudRef.style.visibility == 'hidden') {
+      this.hudRef.style.visibility = 'visible';
+      this.hudRef.style.pointerEvents = 'auto';
+    } else {
+      this.hudRef.style.visibility = 'hidden';
+      this.hudRef.style.pointerEvents = 'none';
+    }
   }
 
   // private toggleFullscreen() {
@@ -128,14 +143,15 @@ export default class Index extends Component<any, any> {
   }
 
   // @ts-ignore
-  private onSendMessage = (message: IMessagePackage) => {
-    this.controllerWindow.postMessage(message, "*");
-  }
+  // private onSendMessage = (message: IMessagePackage) => {
+  //   this.controllerWindow.postMessage(message, "*");
+  // }
 
   private onReceiveMessage = (event) => {
 
     const messagePackage = event.data as IMessagePackage;
-
+    // console.log("index receive msg", messagePackage);
+    
     if (messagePackage.type === MessageTypes.data) {
       console.log("data", messagePackage.data);
     }
@@ -273,6 +289,13 @@ export default class Index extends Component<any, any> {
         }
         break;
 
+      case MessageTypes.toggleLinesVisibility:
+        if (messagePackage.data === true) {
+          this.linesRef.show();
+        } else {
+          this.linesRef.hide();
+        }
+        break;
       case MessageTypes.toggleLinesVisibility:
         if (messagePackage.data === true) {
           this.linesRef.show();
@@ -697,6 +720,13 @@ export default class Index extends Component<any, any> {
           >click to fullscreen</div>
         </div>
         </div>
+        
+        <iframe 
+          style={{visibility:"hidden", pointerEvents:"none"}}
+          src="./controller" 
+          className="hud"
+          ref={(ref) => {this.hudRef = ref; }}
+        ></iframe>
 
         <style jsx>{`
           .cover {
@@ -706,7 +736,16 @@ export default class Index extends Component<any, any> {
             top:50%;
             left:50%;
           }
-
+          
+          .hud {
+            position:absolute;
+            right:1vw;
+            top:2vh;
+            width:300px;
+            height:96vh;
+            background-color:white;
+            opacity:0.8;
+          }
           .container {
             transform: translate(-50%,-50%);
           }

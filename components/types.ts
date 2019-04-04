@@ -47,6 +47,8 @@ export enum MessageTypes {
 
   toggleLogoVisibility,
   toggleLinesVisibility,
+  
+  toggleHUD
 }
 
 export interface IMessagePackage {

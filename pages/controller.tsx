@@ -56,14 +56,19 @@ export default class Controller extends Component<any, any> {
   public componentDidMount() {
     window.addEventListener("message", this.onReceiveMessage);
 
-    this.mainWindow = window.opener;
+    this.mainWindow = window.parent; // we are in an iframe
+    
+    this.textInputRef.addEventListener('keydown', (e) => {
+      e.stopPropagation();
+    }); // don't pass on key events from this
   }
 
   public componentWillUnmount() {
-    window.removeEventListener("message", this.onReceiveMessage);
+    // window.removeEventListener("message", this.onReceiveMessage);
   }
 
   private onSendMessage = (type: MessageTypes, data?: any) => {
+    // console.log('controller send msg', type, data);
     this.mainWindow.postMessage(
       {
         type,
